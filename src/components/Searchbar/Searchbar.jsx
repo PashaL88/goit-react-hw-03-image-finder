@@ -4,7 +4,8 @@ import styles from './Searchbar.module.css'
 
 class Searchbar extends Component {
     state = {
-    q:""
+        q: "",
+        page: 1
     }
     
         handleChange = ({target}) => {
@@ -22,7 +23,7 @@ class Searchbar extends Component {
 
     reset(){
         this.setState({
-            q: ""
+            q: "",
         })
     }
 
@@ -31,10 +32,10 @@ class Searchbar extends Component {
         const {q} = this.state;
         return (
         <header className={styles.searchbar}>
-            <form action="" onSubmit={handleSubmit}>
-                    <button type="submit" className={styles.button}>
+            <form className="styles.searchForm" action="" onSubmit={handleSubmit}>
+                    {/* <button type="submit" className={styles.button}>
                         <span className={styles.label}>Search</span>
-                </button>
+                </button> */}
                     <input className={styles.input} value={q} onChange={handleChange} name='q' type="text" placeholder="Введите строку поиска" required /> 
             </form>
         </header>

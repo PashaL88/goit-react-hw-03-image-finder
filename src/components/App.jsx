@@ -3,9 +3,19 @@ import Searchbar from "./Searchbar";
 import { fetchPhotos } from "../shared/servises/fetchPhotos"
 import ImageGallery from "./ImageGallery";
 import Button from "shared/components/button/Button";
+import Modal from "shared/components/modal";
 import styles from './app.module.css'
-// import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 // import * as basicLightbox from 'basiclightbox'
+
+import { Audio } from  'react-loader-spinner'
+
+
+<Audio
+    height="100"
+    width="100"
+    color='grey'
+    ariaLabel='loading'
+  />
 
 class App extends Component  {
   state = {
@@ -14,6 +24,8 @@ class App extends Component  {
     error: null,
     q: '',
     page: 1,
+    isModalOpen: false,
+    modalBody: {}
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -41,9 +53,10 @@ class App extends Component  {
        }
   }
 
-   setSearch = ({q}) => {
+   setSearch = ({q, page}) => {
         this.setState({
-            q
+          q,
+          page: 1,
         })
    }
   
@@ -54,20 +67,42 @@ class App extends Component  {
       }
     })
   }
+
+  showModal = (modalBody) => {
+    this.setState({
+      isModalOpen: true,
+      modalBody
+    })
+  }
+
+  closeModal = () => {
+    this.setState({
+      isModalOpen: false
+    })
+  }
     
   
   render() {
-    const { items, loading } = this.state;
-    const { setSearch, loadMore } = this;
+    const { items, loading, isModalOpen, modalBody } = this.state;
+    const { setSearch, loadMore, showModal, closeModal } = this;
     return (
-      <div>
+      <div className={styles.App}>
         <Searchbar onSubmit={setSearch} />
-        {loading && <p>...Loading</p>}
-        {Boolean(items.length) && <ImageGallery items={items} />}
+        {loading && <Audio color="#00BFFF" height={80} width={80} />}
+        {Boolean(items.length) && <ImageGallery items={items} onClick={showModal} />}
          {!loading && Boolean(items.length) && (
             <div className={styles.btnContainer}>
                 <Button text="Load more" onClick={loadMore} />
-            </div>)}
+          </div>)}
+        {isModalOpen && (
+          <Modal close={closeModal}>
+            {/* { items.map((item) => (
+            <img key={item.id} src={item.largeImageURL} alt={item.tag} width='500' />
+            ))
+            } */}
+            <img src={modalBody.largeImageURL} alt={modalBody.tags} width='500' />
+          </Modal>
+        )}
   </div>
 )
   }
