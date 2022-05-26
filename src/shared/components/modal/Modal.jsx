@@ -15,14 +15,18 @@ class Modal extends Component {
     closeModal = (e) => {
         if (e.code === 'Escape') {
                 this.props.close()
-            }
+        }
+         if(e.target === e.currentTarget) {
+            this.props.close();
+        }
     }
 
     render() {
-        const {close, children} = this.props
+        const { children } = this.props;
+        const { closeModal } = this;
         return createPortal(
             
-            <div className={styles.overlay} onClick={close}>
+            <div className={styles.overlay} onClick={closeModal}>
                 <div className={styles.modal}>
                     {children}
                 </div>
